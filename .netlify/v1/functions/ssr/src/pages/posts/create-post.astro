@@ -1,0 +1,22 @@
+---
+export const prerender = false;
+
+import Nav from "../../components/nav.astro";
+import "../../style/style.css";
+import Footer from "../../components/footer.astro";
+
+const accessToken = Astro.cookies.get("sb-access-token");
+if (!accessToken) return Astro.redirect("/signin");
+---
+
+<Nav />
+
+<h1>Create Post</h1>
+
+<form action="/api/auth/posts/create" method="POST">
+  <input name="title" placeholder="Title" required />
+  <textarea name="content" placeholder="Post content" required></textarea>
+  <button>Create</button>
+</form>
+
+<Footer />

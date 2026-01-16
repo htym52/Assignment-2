@@ -1,0 +1,32 @@
+---
+export const prerender = false;
+import { supabase } from "../../../lib/supabase";
+
+const { id } = Astro.params;
+const accessToken = Astro.cookies.get("sb-access-token");
+if (!accessToken) return Astro.redirect("/signin");
+
+const { data: userData } = await supabase.auth.getUser(accessToken.value);
+const user = userData?.user;
+if (!user) return Astro.redirect("/signin");
+
+// Fetch post to edit
+const { data: post, error } = await supabase
+  .from('"BLOG-POSTS"')
+  .select("*")
+  .eq("id", id)
+  .single();
+
+if (!post || post.author_id !== user.id) return Astro.redirect("/dashboard");
+---
+
+<h1>Edit Post</h1>
+
+<form action="/api/posts/edit" method="POST">
+  <input type="hidden" name="id" value={post.id} />
+  <label>Title</label>
+  <input name="title" value={post.title} required />
+  <label>Content</label>
+  <textarea name="content" rows="10" required>{post.content}</textarea>
+  <button type="submit">Save Changes</button>
+</form>
