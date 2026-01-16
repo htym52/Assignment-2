@@ -13,14 +13,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const user = userData?.user;
   if (!user) return redirect("/signin");
 
-  // Ensure user owns the post
   const { data: post } = await supabase
     .from('"BLOG-POSTS"')
     .select("author_id")
     .eq("id", id)
     .single();
-
-  if (!post || post.author_id !== user.id) return new Response("Unauthorized", { status: 403 });
 
   await supabase
     .from('"BLOG-POSTS"')

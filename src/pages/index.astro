@@ -3,7 +3,7 @@ import Layout from "../layout/layout.astro";
 import { supabase } from "../lib/supabase";
 
 const { data: posts } = await supabase
-  .from("BLOG-POSTS")
+  .from('"BLOG-POSTS"')
   .select("*")
   .order("created_at", { ascending: false })
   .limit(5);

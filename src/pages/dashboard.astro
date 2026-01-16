@@ -22,9 +22,9 @@ if (!user) {
   return Astro.redirect("/signin");
 }
 
-const { data: posts} = await supabase
+const { data: posts } = await supabase
   .from('"BLOG-POSTS"')
-  .select("id, title, content, created_at")
+  .select("*")
   .eq("author_id", user.id)
   .order("created_at", { ascending: false });
 ---
@@ -37,17 +37,17 @@ const { data: posts} = await supabase
 
   {posts && posts.length > 0 ? (
     <ul>
-      {posts.map((post) => (
-        <li>
-          <a href={`/posts/${post.id}`}>{post.title}</a>
-          <a href={`/posts/edit-post/${post.id}`}>Edit</a>
-          <form action="/api/posts/delete" method="POST" style="display:inline">
-            <input type="hidden" name="id" value={post.id} />
-            <button type="submit">Delete</button>
-          </form>
-        </li>
-      ))}
-    </ul>
+        {posts.map(post => (
+          <li>
+            <a href={`/posts/${post.id}`}>{post.title}</a>
+            <a href={`/posts/edit-post/${post.id}`}>Edit</a>
+            <form action="/api/posts/delete" method="POST">
+              <input type="hidden" name="id" value={post.id} />
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        ))}
+      </ul>
   ) : (
     <p>You have no posts yet.</p>
   )}
