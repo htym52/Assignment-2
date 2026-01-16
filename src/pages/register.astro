@@ -1,0 +1,19 @@
+---
+import Nav from "../components/nav.astro";
+import "../style/style.css";
+import Footer from "../components/footer.astro";
+---
+
+<Nav />
+
+<h1>REGISTER</h1>
+
+<form action="/api/auth/register" method="POST">
+    <input name="name" placeholder="Full name" required />
+    <input name="username" placeholder="Username" required />
+    <input type="email" name="email" placeholder="E-mail" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button>Create account</button>
+</form>
+
+<Footer />

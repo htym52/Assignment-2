@@ -1,16 +1,37 @@
 ---
+import Layout from "../layout/layout.astro";
+import { supabase } from "../lib/supabase";
 
+const { data: posts } = await supabase
+  .from("BLOG-POSTS")
+  .select("*")
+  .order("created_at", { ascending: false })
+  .limit(5);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+   <section class="container">
+    <h1>Latest Posts</h1>
+
+    {posts && posts.length > 0 ? (
+      <div class="cards">
+        {posts.map((post) => (
+          <article class="card">
+            <a href={`/posts/${post.id}`} class="card-link">
+              <div class="card-content">
+                <h3>{post.title}</h3>
+                <p class="card-description">
+                  {post.content.length > 100
+                    ? post.content.slice(0, 100) + "..."
+                    : post.content}
+                </p>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p>No posts yet.</p>
+    )}
+  </section>
+</Layout>
